@@ -6,10 +6,14 @@ var fs = require('fs');
 const multer = require('multer');
 // const Busboy = require("busboy");
 
+
 const faceApiService=require('./modules/faceApiService')
 
 const faceApiModule=require('./modules/faceApiModule')
 const bodyPixService=require('./modules/bodyPixService')
+const downloadYTVideo=require('./modules/YTDownloader').downloadVideo
+
+const downloadVideoWithDetect=require('./modules/YTDownloader').downloadVideoWithDetect
 
 // const humanDetect=require('./modules/humanModule').humanDetect;
 
@@ -39,6 +43,15 @@ app.post('/image_url',(req,res)=>{
   // console.log(req.body)
   // faceApiService.detectImgUrl(req.body.imageUrl,req.body.name)
   faceApiModule.detectImgByUrl(req,res)
+  // humanDetect(req.body.imageUrl,req.body.name)
+  // res.send("DONE")
+})
+
+app.post('/ytVideo',(req,res)=>{
+  // console.log(req.body)
+  // faceApiService.detectImgUrl(req.body.imageUrl,req.body.name)
+  // downloadYTVideo(req,res)
+  downloadVideoWithDetect(req,res)
   // humanDetect(req.body.imageUrl,req.body.name)
   // res.send("DONE")
 })

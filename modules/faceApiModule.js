@@ -82,8 +82,19 @@ const makeFileFromUrl=(url,name)=>{
   })
 }
 
-let INPUTSIZE=480
+let INPUTSIZE=640
 
+const detectImgByPath=(filePath)=>{
+  return new Promise(async(resolve, reject) => {
+    let optionsSSDMobileNet = new faceapi.TinyFaceDetectorOptions({ inputSize: INPUTSIZE })
+    const imageBuffer = fs.readFileSync(filePath);
+
+      const imageTensor =  tf.node.decodeImage(imageBuffer, 3);
+      const result = await faceapi.detectAllFaces(imageTensor, optionsSSDMobileNet).withAgeAndGender()
+      resolve(result)
+      imageTensor.dispose();
+  })
+}
 const detectImgByUrl=(req,res)=>{
 
   const {name,imageUrl}=req.body
@@ -115,7 +126,7 @@ const detectImgByUrl=(req,res)=>{
           imageTensor.dispose();
 
           let finalDets=result.map(item=>{
-              console.log(item)
+              // console.log(item)
             let originalDimensions=item.detection._imageDims
             let {gender,genderProbability,age}=item
             let boundingBox=item.detection._box
@@ -125,7 +136,7 @@ const detectImgByUrl=(req,res)=>{
           let end=new Date().getTime()
           fs.unlinkSync(filePath)
           console.log(name,end-start)
-          res.status(200).json({success:true,name,results:finalDets})
+          res.status(200).json({success:true,name,results:finalDets,time:(end-start)/1000})
           
         } catch (error) {
           console.log('Could not detect image',name,error.message)
@@ -184,5 +195,5 @@ const detectImgByUrl=(req,res)=>{
 
 
 module.exports = {
-    detectImgByUrl,makeFileFromUrl
+    detectImgByUrl,makeFileFromUrl,detectImgByPath
   };
