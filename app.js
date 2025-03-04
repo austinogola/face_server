@@ -7,9 +7,9 @@ const multer = require('multer');
 // const Busboy = require("busboy");
 
 
-const faceApiService=require('./modules/faceApiService')
+// const faceApiService=require('./modules/faceApiService')
 
-const faceApiModule=require('./modules/faceApiModule')
+// const faceApiModule=require('./modules/faceApiModule')
 const bodyPixService=require('./modules/bodyPixService')
 const downloadYTVideo=require('./modules/YTDownloader').downloadVideo
 
@@ -42,7 +42,7 @@ app.use(bodyParser.json({ limit: '10mb' }));
 app.post('/image_url',(req,res)=>{
   // console.log(req.body)
   // faceApiService.detectImgUrl(req.body.imageUrl,req.body.name)
-  faceApiModule.detectImgByUrl(req,res)
+  // faceApiModule.detectImgByUrl(req,res)
   // humanDetect(req.body.imageUrl,req.body.name)
   // res.send("DONE")
 })
@@ -68,35 +68,35 @@ app.post('/ytVideoDownload',(req,res)=>{
 
 
 
-app.post("/upload1", (req, res) => {
-    const busboy = new Busboy({ headers: req.headers });
+// app.post("/upload1", (req, res) => {
+//     const busboy = new Busboy({ headers: req.headers });
 
-    let fileData = Buffer.alloc(0);
-    let fileType = "";
+//     let fileData = Buffer.alloc(0);
+//     let fileType = "";
 
-    busboy.on("file", (fieldname, file, info) => {
-        console.log(`Uploading: ${info.filename}`);
-        fileType = info.mimeType;
+//     busboy.on("file", (fieldname, file, info) => {
+//         console.log(`Uploading: ${info.filename}`);
+//         fileType = info.mimeType;
 
-        file.on("data", (data) => {
-            fileData = Buffer.concat([fileData, data]);
-        });
+//         file.on("data", (data) => {
+//             fileData = Buffer.concat([fileData, data]);
+//         });
 
-        file.on("end", async () => {
-            console.log("File upload complete");
+//         file.on("end", async () => {
+//             console.log("File upload complete");
 
-            // Call your faceApiService (assuming it's an async function)
-            try {
-                const result = await faceApiService.detect(fileData);
-                res.json({ success: true, result });
-            } catch (error) {
-                res.status(500).json({ success: false, error: error.message });
-            }
-        });
-    });
+//             // Call your faceApiService (assuming it's an async function)
+//             try {
+//                 const result = await faceApiService.detect(fileData);
+//                 res.json({ success: true, result });
+//             } catch (error) {
+//                 res.status(500).json({ success: false, error: error.message });
+//             }
+//         });
+//     });
 
-    req.pipe(busboy);
-});
+//     req.pipe(busboy);
+// });
 
 // const upload = multer({ 
 //   storage: multer.memoryStorage(),
@@ -114,15 +114,16 @@ console.log(Object.keys(req))
   const { file } = req.files;
 
   console.log(file);
-  const result = await faceApiService.detect(file.data);
+  // const result = await faceApiService.detect(file.data);
+  // res.json({
+  //   detectedFaces: result,
+  // });
 // const result = await bodyPixService.runBodyPix(file.data);
 
 //   res.json({
 //     detectedFaces: result.length,
 //   });
-res.json({
-    detectedFaces: result,
-  });
+
 
 //   res.send("Successfile upload");
 });
@@ -135,15 +136,17 @@ app.post("/upload",upload.single('file'), async (req, res) => {
     // const { file } = req.files;
   
     console.log(req.file);
-    const result = await faceApiService.detect(req.file.data);
+    // const result = await faceApiService.detect(req.file.data);
+
+    // res.json({
+    //   detectedFaces: result,
+    // });
   // const result = await bodyPixService.runBodyPix(file.data);
   
   //   res.json({
   //     detectedFaces: result.length,
   //   });
-  res.json({
-      detectedFaces: result,
-    });
+ 
   
   //   res.send("Successfile upload");
   });
@@ -154,15 +157,15 @@ app.post("/uploadBase64", async (req, res) => {
       return res.status(400).json({ error: "No data URL provided" });
     }
   
-    try {
-      // Extract Base64 string from data URL
-      const result = await faceApiService.detect(null,dataUrl);
+    // try {
+    //   // Extract Base64 string from data URL
+    //   const result = await faceApiService.detect(null,dataUrl);
   
-      res.json({ result });
-    } catch (error) {
-      console.error("Error processing image:", error);
-      res.status(500).json({ error: "Failed to process image" });
-    }
+    //   res.json({ result });
+    // } catch (error) {
+    //   console.error("Error processing image:", error);
+    //   res.status(500).json({ error: "Failed to process image" });
+    // }
   });
 
 app.listen(port, () => {
