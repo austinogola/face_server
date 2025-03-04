@@ -56,6 +56,16 @@ app.post('/ytVideo',(req,res)=>{
   // res.send("DONE")
 })
 
+app.post('/ytVideoDownload',(req,res)=>{
+  // console.log(req.body)
+  // faceApiService.detectImgUrl(req.body.imageUrl,req.body.name)
+  downloadYTVideo(req,res)
+  // downloadYTVideo(req,res)
+  // downloadVideoWithDetect(req,res)
+  // humanDetect(req.body.imageUrl,req.body.name)
+  // res.send("DONE")
+})
+
 
 
 app.post("/upload1", (req, res) => {
